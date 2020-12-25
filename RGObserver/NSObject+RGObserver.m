@@ -25,24 +25,20 @@ static NSMutableDictionary *rg_keyCountMap;
 @implementation _RGConcubine
 
 - (void)clearInfo {
+    _RGConcubine *obj = self.obj;
     self.target = nil;
     self.observer = nil;
     self.keyPath = nil;
     self.obj = nil;
+    [obj clearInfo];
 }
 
 - (void)dealloc {
     [NSObject rg_releaseDynamicKeyIfNeed:self.key];
     if (_obj || (_target && _target == _observer)) {
-        @try {
-            [_target removeObserver:_observer forKeyPath:_keyPath];
-        } @catch (NSException *exception) {
-//            NSLog(@"%@", exception.description);
-        } @finally {
-            [self clearInfo];
-        }
+        [_target removeObserver:_observer forKeyPath:_keyPath];
+        [self clearInfo];
     }
-//    NSLog(@"dealloc");
 }
 
 @end
@@ -87,13 +83,7 @@ static NSMutableDictionary *rg_keyCountMap;
     if (!exist) {
         return;
     }
-    @try {
-        [self removeObserver:observer forKeyPath:keyPath];
-    } @catch (NSException *exception) {
-        NSLog(@"%@", exception.description);
-    } @finally {
-        
-    }
+    [self removeObserver:observer forKeyPath:keyPath];
 }
 
 - (_RGConcubine *)concubineWithKey:(NSString *)key Observer:(NSObject *)observer forKeyPath:(NSString *)keyPath exist:(BOOL *)exist {
