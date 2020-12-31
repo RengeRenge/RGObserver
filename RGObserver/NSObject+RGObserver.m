@@ -51,10 +51,10 @@ static NSMutableDictionary *rg_keyCountMap;
     NSString *key = [self rg_keyWithObserver:observer forKeyPath:keyPath];
     
     BOOL exist;
-    _RGConcubine *concubine = [self concubineWithKey:key Observer:observer forKeyPath:keyPath exist:&exist];
+    _RGConcubine *concubine = [self concubineWithKey:key target:self observer:observer forKeyPath:keyPath exist:&exist];
     
     if (observer != self) {
-        _RGConcubine *obConcubine = [observer concubineWithKey:key Observer:observer forKeyPath:keyPath exist:nil];
+        _RGConcubine *obConcubine = [observer concubineWithKey:key target:self observer:observer forKeyPath:keyPath exist:nil];
         
         concubine.obj = obConcubine;
         obConcubine.obj = concubine;
@@ -86,7 +86,7 @@ static NSMutableDictionary *rg_keyCountMap;
     [self removeObserver:observer forKeyPath:keyPath];
 }
 
-- (_RGConcubine *)concubineWithKey:(NSString *)key Observer:(NSObject *)observer forKeyPath:(NSString *)keyPath exist:(BOOL *)exist {
+- (_RGConcubine *)concubineWithKey:(NSString *)key target:(NSObject *)target observer:(NSObject *)observer forKeyPath:(NSString *)keyPath exist:(BOOL *)exist {
     _RGConcubine *concubine = [self rg_valueForDynamicKey:key];
     if (exist) {
         *exist = YES;
@@ -98,7 +98,7 @@ static NSMutableDictionary *rg_keyCountMap;
         concubine = [_RGConcubine new];
         [self rg_setValue:concubine forDynamicKey:key retain:YES];
     }
-    concubine.target = self;
+    concubine.target = target;
     concubine.observer = observer;
     concubine.keyPath = keyPath;
     concubine.key = key;

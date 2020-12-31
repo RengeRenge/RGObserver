@@ -9,6 +9,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*
+ 
+ ┌───────────┐         ┌───────────┐
+ │ Concubine │ ┄ ┄ ┄ ⇢ │ Concubine │
+ │           │ ⇠ ┄ ┄ ┄ │           │
+ └───────────┙         └───────────┙
+    ┇   ↑                  ┇  ↑
+    ┇   | (retain)         ┇  | (retain)
+    ⇣   |                  ⇣  |
+ ┌───────────┐         ┌───────────┐
+ │  Target   │         │ Observer  │
+ │           │         │           │
+ └───────────┙         └───────────┙
+ 
+ 1.use run time to associate Target with Concubine1 (reatin)
+ 2.use run time to associate Observer with Concubine2 (reatin)
+ 3.Concubine record the Target and Observer (unsafe_unretained)
+ 4.Concubine record other Concubine (weak)
+ 
+ */
+
 @interface NSObject(RGObserver)
 
 /**
