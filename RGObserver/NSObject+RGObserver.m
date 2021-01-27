@@ -106,8 +106,7 @@ static NSMutableDictionary *rg_keyCountMap;
 }
 
 - (NSString *)rg_keyWithObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath {
-    NSString *key = [NSString stringWithFormat:@"%@-%@", @([observer hash]+[self hash]).stringValue, keyPath];
-    return key;
+    return [NSString stringWithFormat:@"%p-%p-%@", observer, self, keyPath];
 }
 
 @end
